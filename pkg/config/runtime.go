@@ -20,6 +20,7 @@ type RuntimeConfig struct {
 	Labels          []string               `json:"labels,omitempty"`
 	Token           string                 `json:"token,omitempty"`
 	ConfigValues    map[string]interface{} `json:"extraConfig,omitempty"`
+	
 }
 
 func GetRuntime(kubernetesVersion string) Runtime {

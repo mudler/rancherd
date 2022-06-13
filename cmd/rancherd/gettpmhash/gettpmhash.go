@@ -3,7 +3,7 @@ package gettpmhash
 import (
 	"fmt"
 
-	"github.com/rancher/rancherd/pkg/tpm"
+	tpm "github.com/rancher-sandbox/go-tpm"
 	cli "github.com/rancher/wrangler-cli"
 	"github.com/spf13/cobra"
 )

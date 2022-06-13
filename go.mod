@@ -31,11 +31,9 @@ replace (
 )
 
 require (
-	github.com/google/certificate-transparency-go v1.1.2
-	github.com/google/go-attestation v0.3.2
-	github.com/gorilla/websocket v1.4.2
 	github.com/hashicorp/go-discover v0.0.0-20201029210230-738cb3105cd0
 	github.com/pkg/errors v0.9.1
+	github.com/rancher-sandbox/go-tpm v0.0.0-20220512105546-a8efc2a6448e
 	github.com/rancher/rancher/pkg/apis v0.0.0-20210920193801-79027c456224
 	github.com/rancher/system-agent v0.0.1-alpha30
 	github.com/rancher/wharfie v0.3.2

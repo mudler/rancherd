@@ -14,7 +14,7 @@ import (
 	url2 "net/url"
 	"time"
 
-	"github.com/rancher/rancherd/pkg/tpm"
+	tpm "github.com/rancher-sandbox/go-tpm"
 	"github.com/rancher/wrangler/pkg/randomtoken"
 )
 
@@ -59,7 +59,7 @@ func get(server, token, path string, clusterToken bool) ([]byte, string, error) 
 	}
 
 	if isTPM {
-		data, err := tpm.Get(cacert, u.String(), nil)
+		data, err := tpm.Get(u.String(), tpm.WithCAs(cacert), tpm.AppendCustomCAToSystemCA)
 		return data, caChecksum, err
 	}
 
