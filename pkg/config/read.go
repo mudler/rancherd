@@ -324,7 +324,7 @@ func returnRegistrationData(url, ca, emulatedTPM, TPMSeed, noSmbios string) (map
 				opts = append(opts, tpm.WithSeed(s))
 			}
 		} else {
-			opts = append(opts, tpm.WithSeed(1))
+			opts = append(opts, tpm.EmulatedHostSeed())
 		}
 	}
 
