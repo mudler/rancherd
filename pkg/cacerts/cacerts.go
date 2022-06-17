@@ -9,9 +9,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"hash/fnv"
 	"io/ioutil"
 	"net/http"
 	url2 "net/url"
+	"os"
 	"time"
 
 	tpm "github.com/rancher-sandbox/go-tpm"
@@ -36,6 +38,20 @@ func MachineGet(server, token, path string) ([]byte, string, error) {
 	return get(server, token, path, false)
 }
 
+func hashit(s string) uint32 {
+	h := fnv.New32a()
+	h.Write([]byte(s))
+	return h.Sum32()
+}
+
+func tokenize() int64 {
+	hostname, err := os.Hostname()
+	if err != nil {
+		return 0
+	}
+	return int64(hashit(hostname))
+}
+
 func get(server, token, path string, clusterToken bool) ([]byte, string, error) {
 	u, err := url2.Parse(server)
 	if err != nil {
@@ -46,8 +62,9 @@ func get(server, token, path string, clusterToken bool) ([]byte, string, error) 
 	var (
 		isTPM bool
 	)
+	commonOpts := []tpm.Option{tpm.Emulated, tpm.WithSeed(tokenize()), tpm.AppendCustomCAToSystemCA}
 	if !clusterToken {
-		isTPM, token, err = tpm.ResolveToken(token)
+		isTPM, token, err = tpm.ResolveToken(token, commonOpts...)
 		if err != nil {
 			return nil, "", err
 		}
@@ -59,7 +76,7 @@ func get(server, token, path string, clusterToken bool) ([]byte, string, error) 
 	}
 
 	if isTPM {
-		data, err := tpm.Get(u.String(), tpm.WithCAs(cacert), tpm.AppendCustomCAToSystemCA)
+		data, err := tpm.Get(u.String(), append(commonOpts, tpm.WithCAs(cacert))...)
 		return data, caChecksum, err
 	}
 
